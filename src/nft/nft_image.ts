@@ -24,17 +24,26 @@ umi.use(
 
 umi.use(signerIdentity(signer));
 
-(async () => {
+async function main() {
   try {
     //chanege image path to your image path
-    const image = await readFile("file-path");
+    const image = await readFile("./Turbin3 Warrior.png");
 
     //change the image name and mime type
-    // const file =
 
-    // const [myUri] =
-    // console.log("Your image URI: ", myUri);
+    const file = createGenericFile(image, "turbin3-warrior.png", {
+      contentType: "image/png",
+    });
+
+    //Upload the image using the configured Irys uploader
+    //upload() returns an array of uris and take first one
+    const [myUri] = await umi.uploader.upload([file]); 
+
+    console.log("Your image URI: ", myUri);
+
   } catch (error) {
     console.log(error);
   }
-})();
+};
+
+main();

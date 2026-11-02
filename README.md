@@ -1,72 +1,106 @@
-# scripts-solana
+# Turbin3: SPL Tokens and Metaplex Core NFTs
 
-Scripts for creating SPL tokens and NFTs on Solana devnet.
+Completed SPL token and NFT assignment for the Turbin3 Builders Cohort. All transactions were performed on Solana devnet.
 
----
+Based on [ShrinathNR's starter repository](https://github.com/ShrinathNR/turbine-spl-nft-26).
+
+## Completed tasks
+
+- Created an SPL token mint with 6 decimals.
+- Minted 1,000 tokens into my wallet's associated token account.
+- Transferred 100 tokens to another wallet.
+- Added SPL token metadata using Metaplex Token Metadata.
+- Uploaded an NFT image and metadata using Irys.
+- Created a Metaplex Core NFT.
+- Updated the NFT's name and metadata as its update authority.
+
+## Tools
+
+- TypeScript
+- Solana Kit and `@solana-program/token` for SPL token operations
+- Umi and Metaplex Token Metadata for SPL token metadata
+- Umi and Metaplex Core for NFT creation and updates
+- Irys devnet uploader for image and JSON uploads
 
 ## Setup
 
-### 1. Add your wallet
-
-Place your devnet wallet keypair file at the project root:
-
-```
-root/
-└── devnet-wallet.json   ← here
-```
-
-It should be a JSON array of numbers, e.g. `[174, 23, ...]`.
-
-### 2. Install dependencies
+Install dependencies:
 
 ```bash
-npm install
+npm ci
 ```
 
-```bash
-npm install --save-dev @types/node ts-node typescript
+Place your own devnet keypair at the project root as:
+
+```text
+devnet-wallet.json
 ```
 
-### 3. Add your image
+Use a wallet funded with devnet SOL.
 
-Place your image at the project root.
+Place your NFT image at the project root. My example uses:
 
+```text
+Turbin3 Warrior.png
 ```
-root/
-└── image.jpeg   ← here
-```
 
----
+Review each script's addresses, amounts, filenames, and URIs before running it. The committed values refer to my completed example.
 
-> Before running the scripts, go through these docs:
-> - [Solana token docs](https://solana.com/docs/tokens) — mint accounts, token accounts, and ATAs
-> - [Solana Kit](https://www.solanakit.com/) — the JS SDK used for building and sending transactions
-> - [Metaplex Token Metadata](https://www.metaplex.com/docs/smart-contracts/token-metadata) — attaching metadata to SPL tokens
-> - [Metaplex Core](https://www.metaplex.com/docs/smart-contracts/core) — the NFT standard used in the NFT scripts
+## SPL token workflow
 
-## SPL Token
-
-Uses **@solana/kit** and **@solana-program/token** for transactions, and **mpl-token-metadata** via UMI for on-chain metadata.
-
-| Script | Command | What it does |
+| Script | Command | Purpose |
 |---|---|---|
-| `spl_init.ts` | `npm run spl:init` | Creates a new mint account |
-| `spl_metadata.ts` | `npm run spl:metadata` | Attaches a name, symbol, and URI to the mint |
-| `spl_mint.ts` | `npm run spl:mint` | Creates your associated token account and mints tokens into it |
-| `spl_transfer.ts` | `npm run spl:transfer` | Sends tokens to another wallet i.e ata to ata |
+| `src/spl/spl_init.ts` | `npm run spl:init` | Create and initialize a mint |
+| `src/spl/spl_mint.ts` | `npm run spl:mint` | Create the sender's ATA and mint 1,000 tokens |
+| `src/spl/spl_transfer.ts` | `npm run spl:transfer` | Create the recipient's ATA and transfer 100 tokens |
+| `src/spl/spl_metadata.ts` | `npm run spl:metadata` | Add token metadata |
 
-Run them in order. Each script logs the addresses/signatures you'll need to paste into the next one.
+After creating a mint, copy its address into the other SPL scripts. Set the recipient wallet address in the transfer script.
 
----
+The token uses 6 decimals: one token equals 1,000,000 base units.
 
-## NFT
+These scripts are separate transactions. Each successful initialization creates a new mint. ATA creation instructions expect the accounts not to exist yet.
 
-Uses **@solana/kit** and **mpl-core** via UMI. Images and metadata are stored on Irys (decentralized storage).
+### Addresses
 
-| Script | Command | What it does |
+- Mint: `Hp7KFNPivkxYsVfkDxwevzU3g5fNnBQn7JNLfonCczcV`
+- Sender wallet: `3qpgoHaWTYTCXZSTD2SckwTMY82AtbNL45bP8Eo3Ls4d`
+- Recipient wallet: `9EUd4VNcjMAysd7zQk3Q1a4tb28BYndLNBAQDiYnHJ64`
+- Sender ATA: `6sNBBsJn5ZPwofH2D3BfsnUEjYUMWHpA3nHsdtqy1fCu`
+- Recipient ATA: `J5dtj713eUcSzF5GszwhzBzPzB11VPKhkQaV56Rx6P58`
+
+### Transactions
+
+- [Create mint](https://explorer.solana.com/tx/2pKhMZLvwkzrUSb4ZxwVHz59Xoz3YRHGwMiyAvyPiw3zkV3CyykWw5YTri1SuEMEehG6P6VjGGyDjRn9oJKiWGBJ?cluster=devnet)
+- [Mint tokens](https://explorer.solana.com/tx/4gz5sFD8Z5Y8iPWtfkr8UTzwUm25Mx44xP5p2qR38RuWTs9N4i5uv98d2bdX11485SzAqxHKQDRZBh6UYmCLm3wJ?cluster=devnet)
+- [Transfer tokens](https://explorer.solana.com/tx/4qmdNe2E6x8Xu5EpbXruv6a1aobVFfgU8trk7QVb1TSqwKif3goEHXVKqUXwX4spiofYC5E6cdPrjuFg1xaQm7Vi?cluster=devnet)
+- [Create token metadata](https://explorer.solana.com/tx/3tb5FBYpYLBALFYRhGfV77KbJBFcXkkpb5AD51cxM9GbF6YA9XaHrdUKSKC6gmnBG4MLafCebxdmjoa1KgKefHsn?cluster=devnet)
+
+## NFT workflow
+
+| Script | Command | Purpose |
 |---|---|---|
-| `nft_image.ts` | `npm run nft:image` | Uploads your image to Irys, logs the image URI |
-| `nft_metadata.ts` | `npm run nft:metadata` | Builds the metadata JSON and uploads it, logs the metadata URI |
-| `nft_mint.ts` | `npm run nft:mint` | Mints the NFT on-chain using the metadata URI |
+| `src/nft/nft_image.ts` | `npm run nft:image` | Upload the image |
+| `src/nft/nft_metadata.ts` | `npm run nft:metadata` | Upload metadata JSON |
+| `src/nft/nft_mint.ts` | `npm run nft:mint` | Create a Core NFT |
+| `src/nft/nft_update.ts` | `npx ts-node src/nft/nft_update.ts` | Update the existing NFT |
 
-Run them in order. Paste the URI logged by each step into the next script before running it.
+Copy the image URI into the metadata script, then copy the metadata URI into the mint script.
+
+To update the NFT, upload revised metadata and supply its new URI and the existing Asset address to the update script. The metadata upload script currently contains the revised metadata.
+
+Each successful run of the mint script creates a separate NFT. The update script changes the existing NFT.
+
+### Turbin3 Warrior
+
+- Asset: `14QusHcREFFFE5roxtMHTeM9BJj9zmuXqNUGN4KX6kHJ`
+- Original name: `Turbin3 Warrior`
+- Updated name: `Turbin3 Warrior—Level 2`
+
+Resources:
+
+- [Image](https://gateway.irys.xyz/4mCPrPLWaHGRWAzGV3PJpK7oymuzaPqEywX2WquXXXX6)
+- [Original metadata](https://gateway.irys.xyz/BihSi8MaY8yKwXU4cK2pgaxyYo7xBsTcLcbAnNWNTGBV)
+- [Updated metadata](https://gateway.irys.xyz/DHNmq2uG6NJ3GtnMAYETivM4j498qYUwfSk9wcua4tjR)
+- [NFT creation transaction](https://explorer.solana.com/tx/3LFJW557NiGnWWzf9rMAtoWvav8apnNoYRS6oLmrqjt25CfQALJ3XkCx1YShPFdZKaK9oEFmoPbqjTABiDs1rgAW?cluster=devnet)
+- [NFT update transaction](https://explorer.solana.com/tx/5P211jsLtzg3R9icAx1ssNuhCECBFymUkn4cENk9CLgEZ5fSwwrj6EcBLxXWXmWS4Mcsa9yrwuuTeu34L6F4ZTao?cluster=devnet)

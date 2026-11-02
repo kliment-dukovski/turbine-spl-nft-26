@@ -21,18 +21,24 @@ umi.use(
 
 umi.use(signerIdentity(signer));
 
-(async () => {
+async function main() {
   try {
     //change the image uri to your image uri obtained from nft_image.ts
     const image =
-      "https://gateway.irys.xyz/5EDyiNrMWfhjdsEwXLrwkHPwZoZB2m1A2Kudrfxo1tpr";
+      "https://gateway.irys.xyz/4mCPrPLWaHGRWAzGV3PJpK7oymuzaPqEywX2WquXXXX6";
 
-    //json scheme : https://www.metaplex.com/docs/smart-contracts/core/json-schema
-    //change the metadata
-    // const metadata =
-    // const myUri =
-    // console.log(`metadata uri: ${myUri} `);
+   const metadata = {
+    name: "Turbin3 Warrior 2",
+    description: "An upgraded cyberpunk Turbin3 warrior.",
+    image,
+    category: "image",
+   };
+
+   const myUri = await umi.uploader.uploadJson(metadata);
+   console.log(`metadata uri: ${myUri} `);
   } catch (error) {
     console.log("error", error);
   }
-})();
+};
+
+main();
